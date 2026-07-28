@@ -1,0 +1,23 @@
+
+> mahabub-biryani-house@1.0.0 build
+> next build
+
+   ▲ Next.js 15.5.22
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 28.7s
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/components/Features.tsx:46:37
+Type error: 'index' is declared but its value is never read.
+
+[0m [90m 44 |[39m         [33m<[39m[33mStaggerContainer[39m[33m>[39m
+ [90m 45 |[39m           [33m<[39m[33mdiv[39m className[33m=[39m[32m"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"[39m[33m>[39m
+[31m[1m>[22m[39m[90m 46 |[39m             {features[33m.[39mmap((feature[33m,[39m index) [33m=>[39m (
+ [90m    |[39m                                     [31m[1m^[22m[39m
+ [90m 47 |[39m               [33m<[39m[33mStaggerItem[39m key[33m=[39m{feature[33m.[39mid}[33m>[39m
+ [90m 48 |[39m                 [33m<[39m[33mmotion[39m[33m.[39mdiv
+ [90m 49 |[39m                   whileHover[33m=[39m{{ y[33m:[39m [33m-[39m[35m8[39m[33m,[39m boxShadow[33m:[39m [32m'0 20px 40px rgba(212, 175, 55, 0.2)'[39m }}[0m
+Next.js build worker exited with code: 1 and signal: null

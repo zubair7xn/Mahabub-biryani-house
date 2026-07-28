@@ -1,0 +1,41 @@
+{
+  "name": "mahabub-biryani-house",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
+    "@supabase/supabase-js": "^2.110.9",
+    "@tanstack/react-query": "^5.18.1",
+    "@types/node": "^26.1.2",
+    "clsx": "^2.0.0",
+    "framer-motion": "^10.16.4",
+    "lucide-react": "^0.292.0",
+    "next": "^15.5.22",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.47.0",
+    "tailwind-merge": "^2.2.0",
+    "tailwindcss": "^3.3.5",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.49.0",
+    "eslint-config-next": "^15.5.22",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "postcss": "^8.4.30",
+    "typescript": "^5.2.2"
+  }
+}

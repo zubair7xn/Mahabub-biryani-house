@@ -1,0 +1,39 @@
+﻿
+> mahabub-biryani-house@1.0.0 build
+> next build
+
+   Γû▓ Next.js 15.5.22
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 3.6s
+   Linting and checking validity of types ...
+npm.cmd : Failed to compile.
+At line:1 char:60
++ ... i website'; & 'C:\Program Files\nodejs\npm.cmd' run build 2>&1 | Out- ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Failed to compile.:String) [], Re 
+   moteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+.next/types/validator.ts:144:31
+Type error: Type 'typeof import("C:/Users/profe/Documents/mahi bhai 
+website/src/pages/AboutPage")' does not satisfy the constraint 
+'PagesPageConfig'.
+  Property 'default' is missing in type 'typeof 
+import("C:/Users/profe/Documents/mahi bhai website/src/pages/AboutPage")' but 
+required in type 'PagesPageConfig'.
+
+[0m [90m 142 |[39m   type __IsExpected[33m<[39m[33mSpecific[39m 
+[36mextends[39m [33mPagesPageConfig[39m[33m>[39m [33m=[39m 
+[33mSpecific[39m
+ [90m 143 |[39m   [36mconst[39m handler [33m=[39m {} [36mas[39m 
+[36mtypeof[39m [36mimport[39m([32m"../../src/pages/AboutPage.js"[39m)
+[31m[1m>[22m[39m[90m 144 |[39m   type __Check [33m=[39m 
+__IsExpected[33m<[39m[36mtypeof[39m handler[33m>[39m
+ [90m     |[39m                               [31m[1m^[22m[39m
+ [90m 145 |[39m   [90m// @ts-ignore[39m
+ [90m 146 |[39m   type __Unused [33m=[39m __Check
+ [90m 147 |[39m }[0m
+Next.js build worker exited with code: 1 and signal: null
