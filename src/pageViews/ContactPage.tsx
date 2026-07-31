@@ -3,7 +3,9 @@
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Clock, MessageCircle } from 'lucide-react';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '../components/AnimationWrappers';
-import { restaurantInfo, faqContent } from '../data/restaurant';
+import { useRestaurantSettings } from '../hooks/useRestaurantSettings';
+import { faqContent } from '../data/faq';
+import { restaurantDefaults } from '../data/restaurantDefaults';
 import { useState } from 'react';
 
 interface ContactPageProps {
@@ -13,8 +15,12 @@ interface ContactPageProps {
 
 export function ContactPage({ isDark = false, language = 'en' }: ContactPageProps) {
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
+  const { data: settings } = useRestaurantSettings();
 
-  const businessDays = Object.entries(restaurantInfo.businessHours).map(
+  const googleMapsUrl = settings?.mapsUrl ?? restaurantDefaults.mapsUrl;
+  const mapEmbedLocation = settings?.coordinates ?? restaurantDefaults.coordinates;
+  const mapEmbedUrl = `https://www.google.com/maps?q=${mapEmbedLocation.lat},${mapEmbedLocation.lng}&output=embed`;
+  const businessDays = Object.entries(settings?.businessHours ?? restaurantDefaults.businessHours).map(
     ([day, hours]) => ({
       day: day.charAt(0).toUpperCase() + day.slice(1),
       ...hours,
@@ -58,16 +64,16 @@ export function ContactPage({ isDark = false, language = 'en' }: ContactPageProp
                   {language === 'en' ? 'Call Us' : 'আমাদের কল করুন'}
                 </h3>
                 <a
-                  href={`tel:${restaurantInfo.phone}`}
+                  href={`tel:${settings?.phone ?? restaurantDefaults.phone}`}
                   className="text-amber-500 font-semibold hover:text-amber-600 transition-colors block mb-2"
                 >
-                  {restaurantInfo.phone}
+                  {settings?.phone ?? restaurantDefaults.phone}
                 </a>
                 <a
-                  href={`tel:${restaurantInfo.phone2}`}
+                  href={`tel:${settings?.phone2 ?? restaurantDefaults.phone2}`}
                   className={`${isDark ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-700'} transition-colors`}
                 >
-                  {restaurantInfo.phone2}
+                  {settings?.phone2 ?? restaurantDefaults.phone2}
                 </a>
               </motion.div>
             </StaggerItem>
@@ -87,10 +93,10 @@ export function ContactPage({ isDark = false, language = 'en' }: ContactPageProp
                   {language === 'en' ? 'Email Us' : 'আমাদের ইমেইল করুন'}
                 </h3>
                 <a
-                  href={`mailto:${restaurantInfo.email}`}
+                  href={`mailto:${settings?.email ?? restaurantDefaults.email}`}
                   className="text-amber-500 font-semibold hover:text-amber-600 transition-colors block"
                 >
-                  {restaurantInfo.email}
+                  {settings?.email ?? restaurantDefaults.email}
                 </a>
               </motion.div>
             </StaggerItem>
@@ -109,8 +115,18 @@ export function ContactPage({ isDark = false, language = 'en' }: ContactPageProp
                 <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {language === 'en' ? 'Visit Us' : 'আমাদের দেখুন'}
                 </h3>
-                <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>
-                  {restaurantInfo.address}
+                <a
+                  href={googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'}
+                >
+                  {settings?.address ?? restaurantDefaults.address}
+                </a>
+                <p className={`mt-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {language === 'en'
+                    ? 'Tap to open the exact location on Google Maps.'
+                    : 'Google Maps-এ সঠিক অবস্থান দেখতে ঠিকানায় ট্যাপ করুন।'}
                 </p>
               </motion.div>
             </StaggerItem>
@@ -123,7 +139,8 @@ export function ContactPage({ isDark = false, language = 'en' }: ContactPageProp
           <ScrollReveal>
             <div className="rounded-xl overflow-hidden shadow-lg h-96">
               <iframe
-                src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.8194717461437!2d90.28854!3d23.82453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${restaurantInfo.coordinates.lat}%2C${restaurantInfo.coordinates.lng}!5e0!3m2!1sen!2sbd!4v1234567890`}
+                title="Mahabub Biryani House Location"
+                src={mapEmbedUrl}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -163,9 +180,29 @@ export function ContactPage({ isDark = false, language = 'en' }: ContactPageProp
               <h4 className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 {language === 'en' ? 'Follow Us' : 'আমাদের অনুসরণ করুন'}
               </h4>
+              <div className="space-y-4 mb-6">
+                <a
+                  href={googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex w-full justify-center px-6 py-3 rounded-lg font-bold transition-all ${
+                    isDark ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'
+                  }`}
+                >
+                  {language === 'en' ? 'Leave a Google Review' : 'Google-এ রিভিউ দিন'}
+                </a>
+                <a
+                  href="/reviews"
+                  className={`inline-flex w-full justify-center px-6 py-3 rounded-lg font-bold transition-all ${
+                    isDark ? 'bg-amber-600 hover:bg-amber-700 text-white' : 'bg-amber-500 hover:bg-amber-600 text-white'
+                  }`}
+                >
+                  {language === 'en' ? 'Write a Review on Our Website' : 'আমাদের সাইটে রিভিউ লিখুন'}
+                </a>
+              </div>
               <div className="flex gap-4">
                 <a
-                  href={restaurantInfo.socialMedia.facebook}
+                  href={settings?.facebook_url ?? restaurantDefaults.socialMedia.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`px-6 py-3 rounded-lg font-bold transition-all ${
@@ -177,7 +214,7 @@ export function ContactPage({ isDark = false, language = 'en' }: ContactPageProp
                   Facebook
                 </a>
                 <a
-                  href={restaurantInfo.socialMedia.messenger}
+                  href={settings?.instagram_url ?? restaurantDefaults.socialMedia.messenger}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`px-6 py-3 rounded-lg font-bold transition-all ${
@@ -189,7 +226,7 @@ export function ContactPage({ isDark = false, language = 'en' }: ContactPageProp
                   <MessageCircle size={18} />
                 </a>
                 <a
-                  href={restaurantInfo.socialMedia.whatsappBusiness}
+                  href={settings?.whatsappBusiness ?? restaurantDefaults.socialMedia.whatsappBusiness}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`px-6 py-3 rounded-lg font-bold transition-all ${

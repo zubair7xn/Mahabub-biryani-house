@@ -1,19 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { menuItems } from '../data/menu';
-import { restaurantInfo } from '../data/restaurant';
+import { useRestaurantSettings } from '../hooks/useRestaurantSettings';
+import { restaurantDefaults } from '../data/restaurantDefaults';
 import { motion } from 'framer-motion';
 import { Trash2, Plus, Minus, Phone, MessageCircle } from 'lucide-react';
 import { formatPrice, generateOrderId, calculateEstimatedDeliveryTime } from '../utils/helpers';
 import { ScrollReveal } from '../components/AnimationWrappers';
-
-interface OrderItem {
-  itemId: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
+import { useCart } from '../context/CartContext';
+import { useMenu } from '../hooks/useMenu';
 
 interface OrderFormData {
   name: string;
@@ -28,7 +23,9 @@ interface OrderPageProps {
 }
 
 export function OrderPage({ isDark = false, language = 'en' }: OrderPageProps) {
-  const [selectedItems, setSelectedItems] = useState<OrderItem[]>([]);
+  const { data: menuItems = [] } = useMenu();
+  const { data: settings } = useRestaurantSettings();
+  const { items: selectedItems, addItem, updateQuantity, removeItem, totalPrice } = useCart();
   const [formData, setFormData] = useState<OrderFormData>({
     name: '',
     phone: '',
@@ -36,48 +33,14 @@ export function OrderPage({ isDark = false, language = 'en' }: OrderPageProps) {
     specialNotes: '',
   });
 
-  const addToOrder = (item: typeof menuItems[0]) => {
-    const existingItem = selectedItems.find((i) => i.itemId === item.id);
-
-    if (existingItem) {
-      setSelectedItems(
-        selectedItems.map((i) =>
-          i.itemId === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        )
-      );
-    } else {
-      setSelectedItems([
-        ...selectedItems,
-        {
-          itemId: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: 1,
-        },
-      ]);
-    }
+  const addToOrder = (item: (typeof menuItems)[number]) => {
+    addItem({
+      menuItemId: item.id,
+      name: language === 'en' ? item.name : item.namebengali || item.name,
+      price: item.price,
+      quantity: 1,
+    });
   };
-
-  const updateQuantity = (itemId: string, quantity: number) => {
-    if (quantity === 0) {
-      removeItem(itemId);
-    } else {
-      setSelectedItems(
-        selectedItems.map((i) =>
-          i.itemId === itemId ? { ...i, quantity } : i
-        )
-      );
-    }
-  };
-
-  const removeItem = (itemId: string) => {
-    setSelectedItems(selectedItems.filter((i) => i.itemId !== itemId));
-  };
-
-  const totalPrice = selectedItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
 
   const handleSubmitOrder = (method: 'call' | 'whatsapp' | 'foodpanda') => {
     if (!formData.name || !formData.phone || !formData.address || selectedItems.length === 0) {
@@ -97,10 +60,13 @@ export function OrderPage({ isDark = false, language = 'en' }: OrderPageProps) {
     const message = `Order ID: ${orderId}\n\nCustomer: ${formData.name}\nPhone: ${formData.phone}\nAddress: ${formData.address}\n\nItems:\n${orderSummary}\n\nTotal: ${formatPrice(totalPrice)}\n\nSpecial Notes: ${formData.specialNotes || 'None'}`;
 
     if (method === 'call') {
-      window.location.href = `tel:${restaurantInfo.phone}`;
+      window.location.href = `tel:${settings?.phone ?? restaurantDefaults.phone}`;
     } else if (method === 'whatsapp') {
+      const whatsappUrl = settings?.whatsappBusiness ?? restaurantDefaults.socialMedia.whatsappBusiness;
       window.open(
-        `https://wa.me/${restaurantInfo.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`,
+        whatsappUrl.includes('wa.me')
+          ? `${whatsappUrl}?text=${encodeURIComponent(message)}`
+          : `https://wa.me/${(settings?.phone ?? restaurantDefaults.phone).replace(/\D/g, '')}?text=${encodeURIComponent(message)}`,
         '_blank'
       );
     } else if (method === 'foodpanda') {
@@ -178,7 +144,7 @@ export function OrderPage({ isDark = false, language = 'en' }: OrderPageProps) {
                 ) : (
                   selectedItems.map((item) => (
                     <motion.div
-                      key={item.itemId}
+                      key={item.menuItemId}
                       layout
                       className={`p-3 rounded-lg ${isDark ? 'bg-gray-700' : 'bg-white'} flex justify-between items-center`}
                     >
@@ -192,19 +158,19 @@ export function OrderPage({ isDark = false, language = 'en' }: OrderPageProps) {
                       </div>
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() => updateQuantity(item.itemId, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.menuItemId, item.quantity - 1)}
                           className={`p-1 rounded ${isDark ? 'bg-gray-600' : 'bg-gray-200'}`}
                         >
                           <Minus size={14} />
                         </button>
                         <button
-                          onClick={() => updateQuantity(item.itemId, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.menuItemId, item.quantity + 1)}
                           className={`p-1 rounded ${isDark ? 'bg-gray-600' : 'bg-gray-200'}`}
                         >
                           <Plus size={14} />
                         </button>
                         <button
-                          onClick={() => removeItem(item.itemId)}
+                          onClick={() => removeItem(item.menuItemId)}
                           className="p-1 rounded bg-red-500 text-white hover:bg-red-600"
                         >
                           <Trash2 size={14} />

@@ -110,8 +110,8 @@ export const menuItems: MenuItem[] = [
 
   // Snacks
   {
-    id: 'fuchka',
-    name: 'Fuchka',
+    id: 'fuckha',
+    name: 'Fuckha',
     namebengali: 'ফুচকা',
     description: 'Crispy hollow puris filled with potato, chickpeas, and spiced water. A perfect street food treat.',
     category: 'snacks',

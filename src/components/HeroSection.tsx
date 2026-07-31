@@ -3,6 +3,10 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { t } from '../utils/i18n';
+import heroImg from '../../hero/hero.png';
+
+const heroSrc = typeof heroImg === 'string' ? heroImg : (heroImg as { src: string }).src;
 
 interface HeroSectionProps {
   language: 'en' | 'bn';
@@ -14,11 +18,11 @@ export function HeroSection({ language }: HeroSectionProps) {
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage:
-            'url(https://images.unsplash.com/photo-1645112411341-6c4ee32510a8?w=1200&h=800&fit=crop)',
+          backgroundImage: `url(${heroSrc})`,
+          filter: 'blur(3px)',
         }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="absolute inset-0 bg-amber-600 bg-opacity-55 mix-blend-multiply"></div>
       </div>
 
       <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,9 +37,7 @@ export function HeroSection({ language }: HeroSectionProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.4 }}
           >
-            {language === 'en'
-              ? 'The Taste of Authentic Bangladeshi Biryani'
-              : 'খাঁটি বাংলাদেশী বিরিয়ানির স্বাদ'}
+            {t('hero.headline', language)}
           </motion.h1>
 
           <motion.p
@@ -44,9 +46,7 @@ export function HeroSection({ language }: HeroSectionProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.6 }}
           >
-            {language === 'en'
-              ? 'Serving Savar with authentic flavors, premium ingredients, and unforgettable taste.'
-              : 'সারভারকে খাঁটি স্বাদ, প্রিমিয়াম উপাদান এবং অবিস্মরণীয় স্বাদ দিয়ে সেবা করছি।'}
+            {t('hero.subheadline', language)}
           </motion.p>
 
           <motion.div
@@ -59,14 +59,14 @@ export function HeroSection({ language }: HeroSectionProps) {
               href="/order"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-amber-500 hover:bg-amber-600 text-white font-bold text-lg rounded-lg transition-all hover:shadow-lg hover:shadow-amber-500/50"
             >
-              {language === 'en' ? 'Order Now' : 'এখনই অর্ডার করুন'}
+              {t('hero.orderBtn', language)}
               <ArrowRight size={20} />
             </Link>
             <Link
               href="/menu"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold text-lg rounded-lg transition-all"
             >
-              {language === 'en' ? 'View Menu' : 'মেনু দেখুন'}
+              {t('hero.menuBtn', language)}
             </Link>
           </motion.div>
         </motion.div>
@@ -79,7 +79,7 @@ export function HeroSection({ language }: HeroSectionProps) {
       >
         <div className="flex flex-col items-center gap-2">
           <span className="text-white text-sm">
-            {language === 'en' ? 'Scroll to explore' : 'আরও দেখতে স্ক্রল করুন'}
+            {t('hero.scrollHint', language)}
           </span>
           <svg
             className="w-6 h-6 text-white"

@@ -4,13 +4,43 @@ export interface MenuItem {
   name: string;
   namebengali?: string;
   description: string;
-  category: 'biryani' | 'tehari' | 'snacks' | 'drinks' | 'desserts';
+  category: string;
   price: number;
   image: string;
   available?: boolean;
   isPopular?: boolean;
   rating?: number;
   servingSize?: string;
+}
+
+export interface RestaurantSettings {
+  name: string;
+  tagline?: string | null;
+  phone?: string | null;
+  phone2?: string | null;
+  email?: string | null;
+  address?: string | null;
+  opening_hours?: string | null;
+  facebook_url?: string | null;
+  instagram_url?: string | null;
+  messenger_url?: string | null;
+  whatsappBusiness?: string | null;
+  mapsUrl?: string | null;
+  logo_url?: string | null;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+  businessHours?: Record<string, { open: string; close: string }>;
+}
+
+export interface GalleryImage {
+  id: string;
+  src: string;
+  alt: string;
+  category: 'food' | 'restaurant' | 'kitchen' | 'customers' | 'events' | 'drinks';
+  title?: string | null;
+  caption?: string | null;
 }
 
 export interface Review {

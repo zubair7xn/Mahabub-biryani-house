@@ -17,5 +17,8 @@ export function useMenu() {
 
       return (await response.json()) as MenuItem[];
     },
+    retry: 1,
+    staleTime: 30_000,
+    refetchOnWindowFocus: false,
   });
 }

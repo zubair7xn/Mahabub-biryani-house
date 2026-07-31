@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { ScrollReveal, StaggerContainer, StaggerItem } from './AnimationWrappers';
 import { features } from '../data/restaurant';
+import { t } from '../utils/i18n';
 
 const iconMap: { [key: string]: React.ReactNode } = {
   Leaf: <Leaf size={32} />,
@@ -33,7 +34,7 @@ export function Features({ isDark, language }: FeaturesProps) {
         {/* Header */}
         <ScrollReveal className="text-center mb-16">
           <h2 className={`text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            {language === 'en' ? 'Why Choose Us' : 'আমাদের বিশেষত্ব'}
+            {t('features.title', language)}
           </h2>
           <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
             {language === 'en'

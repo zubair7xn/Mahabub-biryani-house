@@ -30,3 +30,10 @@ dist-ssr
 
 # Build files
 .cache
+# Next.js
+.next/
+out/
+.next-cache/
+
+# TypeScript
+tsconfig.tsbuildinfo

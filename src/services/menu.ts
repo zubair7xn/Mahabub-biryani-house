@@ -1,4 +1,5 @@
-import { supabase } from '../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+import type { Database } from '../../lib/supabase-types';
 import type { MenuItem } from '../types';
 
 interface MenuRow {
@@ -6,14 +7,20 @@ interface MenuRow {
   sl: number;
   name_en: string;
   name_bn: string;
+  description_en: string | null;
+  description_bn: string | null;
+  category: string;
   price: number;
   image_url?: string | null;
   available: boolean;
+  is_popular: boolean;
+  sort_order: number;
 }
 
 const itemCategories: Record<string, MenuItem['category']> = {
   biryani: 'biryani',
   biriani: 'biryani',
+  polao: 'biryani',
   tehari: 'tehari',
   tehar: 'tehari',
   naan: 'snacks',
@@ -36,7 +43,21 @@ const itemCategories: Record<string, MenuItem['category']> = {
   burhani: 'drinks',
 };
 
-const fallbackImages: Record<MenuItem['category'], string> = {
+function normalizeMenuCategory(value?: string | null): string {
+  const normalizedValue = (value ?? '').trim().toLowerCase();
+
+  if (!normalizedValue || normalizedValue === 'uncategorized') {
+    return 'snacks';
+  }
+
+  const matchedCategory = Object.entries(itemCategories).find(([term]) =>
+    normalizedValue.includes(term),
+  );
+
+  return matchedCategory ? matchedCategory[1] : normalizedValue;
+}
+
+const fallbackImages: Record<string, string> = {
   biryani: 'https://images.unsplash.com/photo-1645112411341-6c4ee32510a8?w=800&q=80',
   tehari: 'https://images.unsplash.com/photo-1585937421612-70a19fb6b537?w=800&q=80',
   snacks: 'https://images.unsplash.com/photo-1609501676725-7186f017a4b8?w=800&q=80',
@@ -81,8 +102,11 @@ function mapMenuRow(row: MenuRow): MenuItem {
   const categoryKey = Object.entries(itemCategories).find(([term]) =>
     normalizedName.toLowerCase().includes(term)
   );
-  const category = categoryKey ? categoryKey[1] : 'snacks';
-  const image = row.image_url || fallbackImages[category];
+  const hasExplicitCategory = Boolean(row.category?.trim()) && !row.category?.trim().toLowerCase().includes('uncategorized');
+  const category = hasExplicitCategory
+    ? normalizeMenuCategory(row.category)
+    : (categoryKey ? categoryKey[1] : 'snacks');
+  const image = row.image_url || fallbackImages[category] || fallbackImages.snacks;
   const description = menuDescriptions[normalizedName] || `Enjoy our ${normalizedName} prepared fresh with authentic spices.`;
   const servingSize = normalizedName.includes('Half')
     ? 'Half portion'
@@ -110,7 +134,7 @@ function mapMenuRow(row: MenuRow): MenuItem {
   };
 }
 
-const seedItems: Omit<MenuRow, 'id'>[] = [
+const seedItems: Database['public']['Tables']['menu_items']['Insert'][] = [
   { sl: 1, name_en: 'Beef Tehari (Half)', name_bn: 'গরুর তেহারী হাফ', price: 160, image_url: null, available: true },
   { sl: 2, name_en: 'Beef Tehari (Full)', name_bn: 'গরুর তেহারী ফুল', price: 220, image_url: null, available: true },
   { sl: 3, name_en: 'Chicken Biryani (Half)', name_bn: 'চিকেন বিরিয়ানি হাফ', price: 90, image_url: null, available: true },
@@ -141,6 +165,10 @@ const seedItems: Omit<MenuRow, 'id'>[] = [
 ];
 
 export async function seedMenuItemsIfEmpty() {
+  if (!supabase || !isSupabaseConfigured) {
+    return;
+  }
+
   const { error, count } = await supabase
     .from('menu_items')
     .select('id', { count: 'exact' });
@@ -161,32 +189,36 @@ export async function seedMenuItemsIfEmpty() {
 }
 
 export async function getMenuItems(): Promise<MenuItem[]> {
+  if (!supabase || !isSupabaseConfigured) {
+    throw new Error('Supabase is not configured for menu fetch.');
+  }
+
   const { data, error } = await supabase
     .from('menu_items')
     .select('*')
     .eq('available', true)
+    .order('sort_order', { ascending: true })
     .order('sl', { ascending: true });
 
   if (error) {
-    if (error.message.includes('does not exist')) {
-      throw new Error('The Supabase table menu_items does not exist. Please create it in the Supabase dashboard.');
-    }
-    throw error;
+    throw new Error('Supabase menu fetch failed: ' + error.message);
   }
 
   if (!data || data.length === 0) {
+    // If no items, attempt to seed (migration); if seeding fails, propagate error.
     await seedMenuItemsIfEmpty();
     const retry = await supabase
       .from('menu_items')
       .select('*')
       .eq('available', true)
+      .order('sort_order', { ascending: true })
       .order('sl', { ascending: true });
 
     if (retry.error) {
-      throw retry.error;
+      throw new Error('Supabase menu retry failed: ' + retry.error.message);
     }
 
-    return retry.data.map(mapMenuRow);
+    return (retry.data || []).map(mapMenuRow);
   }
 
   return data.map(mapMenuRow);

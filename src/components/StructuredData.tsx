@@ -1,91 +1,90 @@
 import Script from 'next/script';
-import { restaurantInfo, faqContent } from '../data/restaurant';
+import { getRestaurantSettings } from '../services/restaurant';
+import { faqContent } from '../data/faq';
+import { restaurantDefaults } from '../data/restaurantDefaults';
 
 interface StructuredDataProps {
   pathname: string;
   includeFAQ?: boolean;
 }
 
-export function StructuredData({ pathname, includeFAQ = false }: StructuredDataProps) {
+export async function StructuredData({ pathname, includeFAQ = false }: StructuredDataProps) {
+  let settings = null;
+
+  try {
+    settings = await getRestaurantSettings();
+  } catch (error) {
+    console.warn('StructuredData fallback due to settings error:', error);
+  }
+
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') || 'https://mahabubbiryanihouse.com';
   const url = `${baseUrl}${pathname}`;
 
-  const logoUrl = `${baseUrl}/logo.png`;
+  const logoUrl = settings?.logo_url ?? `${baseUrl}/logo.png`;
+  const visualName = settings?.name ?? restaurantDefaults.name;
+  const streetAddress = settings?.address ?? restaurantDefaults.address;
+  const telephone = settings?.phone ?? restaurantDefaults.phone;
+  const sameAs = [
+    settings?.facebook_url ?? restaurantDefaults.socialMedia.facebook,
+    settings?.whatsappBusiness ?? restaurantDefaults.socialMedia.whatsappBusiness,
+  ].filter(Boolean) as string[];
+
   const structuredData: Array<Record<string, unknown>> = [
     {
       '@context': 'https://schema.org',
       '@type': 'Restaurant',
-      name: restaurantInfo.name,
+      name: visualName,
       image: logoUrl,
       '@id': url,
       url,
-      telephone: restaurantInfo.phone,
+      telephone,
       address: {
         '@type': 'PostalAddress',
-        streetAddress: restaurantInfo.address,
+        streetAddress,
         addressLocality: 'Savar',
         addressRegion: 'Dhaka',
         addressCountry: 'BD',
       },
-      openingHoursSpecification: Object.entries(restaurantInfo.businessHours).map(
-        ([day, hours]) => ({
-          '@type': 'OpeningHoursSpecification',
-          dayOfWeek: day.charAt(0).toUpperCase() + day.slice(1),
-          opens: hours.open,
-          closes: hours.close,
-        })
-      ),
       priceRange: '৳',
       servesCuisine: ['Biryani', 'Bangladeshi', 'Snacks', 'Desserts', 'Drinks'],
-      sameAs: [
-        restaurantInfo.socialMedia.facebook,
-        restaurantInfo.socialMedia.whatsappBusiness,
-      ],
+      sameAs,
     },
     {
       '@context': 'https://schema.org',
       '@type': 'LocalBusiness',
-      name: restaurantInfo.name,
-      telephone: restaurantInfo.phone,
+      name: visualName,
+      telephone,
       address: {
         '@type': 'PostalAddress',
-        streetAddress: restaurantInfo.address,
+        streetAddress,
         addressLocality: 'Savar',
         addressRegion: 'Dhaka',
         addressCountry: 'BD',
       },
       geo: {
         '@type': 'GeoCoordinates',
-        latitude: restaurantInfo.coordinates.lat,
-        longitude: restaurantInfo.coordinates.lng,
+        latitude: restaurantDefaults.coordinates.lat,
+        longitude: restaurantDefaults.coordinates.lng,
       },
-      openingHoursSpecification: Object.entries(restaurantInfo.businessHours).map(
-        ([day, hours]) => ({
-          '@type': 'OpeningHoursSpecification',
-          dayOfWeek: day.charAt(0).toUpperCase() + day.slice(1),
-          opens: hours.open,
-          closes: hours.close,
-        })
-      ),
       url,
       image: logoUrl,
     },
     {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: restaurantInfo.name,
+      name: visualName,
       url: baseUrl,
       logo: logoUrl,
-      sameAs: [restaurantInfo.socialMedia.facebook],
+      sameAs,
     },
     {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       url: baseUrl,
-      name: restaurantInfo.name,
+      name: visualName,
       publisher: {
         '@type': 'Organization',
-        name: restaurantInfo.name,
+        name: visualName,
       },
     },
     {

@@ -11,6 +11,7 @@ interface MenuItemCardProps {
   isDark: boolean;
   language: 'en' | 'bn';
   showRating?: boolean;
+  onAddToCart?: () => void;
 }
 
 export function MenuItemCard({
@@ -18,6 +19,7 @@ export function MenuItemCard({
   isDark,
   language,
   showRating = true,
+  onAddToCart,
 }: MenuItemCardProps) {
   return (
     <motion.div
@@ -49,11 +51,16 @@ export function MenuItemCard({
       <div className="p-4">
         <div className="mb-2">
           <h3 className={`font-bold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            {item.name}
+            {language === 'en' ? item.name : item.namebengali || item.name}
           </h3>
-          {item.namebengali && (
+          {item.namebengali && language === 'en' && (
             <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
               {item.namebengali}
+            </p>
+          )}
+          {item.name && language === 'bn' && (
+            <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+              {item.name}
             </p>
           )}
         </div>
@@ -87,12 +94,23 @@ export function MenuItemCard({
           <span className="text-xl font-bold text-amber-500">
             {formatPrice(item.price)}
           </span>
-          <Link
-            href="/order"
-            className="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-lg transition-colors"
-          >
-            <ShoppingCart size={18} />
-          </Link>
+          <div className="flex items-center gap-2">
+            {onAddToCart ? (
+              <button
+                type="button"
+                onClick={onAddToCart}
+                className="bg-amber-500 hover:bg-amber-600 text-white px-3 py-2 rounded-lg font-medium transition-colors"
+              >
+                {language === 'en' ? 'Add' : 'যোগ করুন'}
+              </button>
+            ) : null}
+            <Link
+              href="/order"
+              className="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-lg transition-colors"
+            >
+              <ShoppingCart size={18} />
+            </Link>
+          </div>
         </div>
       </div>
     </motion.div>

@@ -55,7 +55,7 @@ export function ThemeLanguageProvider({ children }: { children: React.ReactNode 
     <ThemeLanguageContext.Provider value={contextValue}>
       <div className={`${isDark ? 'dark' : ''} min-h-screen bg-white dark:bg-gray-900`}>
         <Navbar />
-        <main>{children}</main>
+        <main className="min-h-screen">{children}</main>
         <Footer />
         <FloatingButtons />
       </div>

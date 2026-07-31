@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { menuItems } from '../data/menu';
 import { MenuItemCard } from '../components/MenuItemCard';
 import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
 import { ScrollReveal } from '../components/AnimationWrappers';
+import { useCart } from '../context/CartContext';
+import { useMenu } from '../hooks/useMenu';
+import { getMenuCategoryOptions } from '../utils/menuCategories';
 
 interface MenuPageProps {
   isDark?: boolean;
@@ -15,15 +17,13 @@ interface MenuPageProps {
 export function MenuPage({ isDark = false, language = 'en' }: MenuPageProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const { data: menuItems = [] } = useMenu();
+  const { addItem } = useCart();
 
-  const categories = [
-    { id: 'all', label: language === 'en' ? 'All' : 'সবকিছু' },
-    { id: 'biryani', label: language === 'en' ? 'Biryani' : 'বিরিয়ানি' },
-    { id: 'tehari', label: language === 'en' ? 'Tehari' : 'তেহারি' },
-    { id: 'snacks', label: language === 'en' ? 'Snacks' : 'খাবার' },
-    { id: 'drinks', label: language === 'en' ? 'Drinks' : 'পানীয়' },
-    { id: 'desserts', label: language === 'en' ? 'Desserts' : 'মিষ্টি' },
-  ];
+  const categories = useMemo(() => {
+    const availableCategories = menuItems.map((item) => item.category);
+    return getMenuCategoryOptions(language, availableCategories);
+  }, [language, menuItems]);
 
   const filteredItems = useMemo(() => {
     return menuItems.filter((item) => {
@@ -40,7 +40,7 @@ export function MenuPage({ isDark = false, language = 'en' }: MenuPageProps) {
 
       return matchesCategory && matchesSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [menuItems, selectedCategory, searchQuery]);
 
   return (
     <main className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
@@ -117,6 +117,14 @@ export function MenuPage({ isDark = false, language = 'en' }: MenuPageProps) {
                   item={item}
                   isDark={isDark}
                   language={language}
+                  onAddToCart={() =>
+                    addItem({
+                      menuItemId: item.id,
+                      name: language === 'en' ? item.name : item.namebengali || item.name,
+                      price: item.price,
+                      quantity: 1,
+                    })
+                  }
                 />
               </motion.div>
             ))}

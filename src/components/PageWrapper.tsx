@@ -11,8 +11,11 @@ interface PageWrapperProps {
 export function PageWrapper({ children }: PageWrapperProps) {
   const { isDark, language } = useThemeLanguage();
 
-  if (isValidElement(children)) {
-    return cloneElement(children, { isDark, language });
+  if (isValidElement(children) && typeof children.type !== 'string') {
+    return cloneElement(children, {
+      isDark,
+      language,
+    });
   }
 
   return children;

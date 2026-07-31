@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { galleryImages } from '../data/gallery';
+import { useGallery } from '../hooks/useGallery';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ScrollReveal } from '../components/AnimationWrappers';
@@ -15,6 +15,7 @@ export function GalleryPage({ isDark = false, language = 'en' }: GalleryPageProp
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const { data: galleryImages = [] } = useGallery();
 
   const categories = [
     { id: 'all', label: language === 'en' ? 'All' : 'সবকিছু' },

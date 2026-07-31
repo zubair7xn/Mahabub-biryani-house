@@ -7,12 +7,14 @@ import { usePathname } from 'next/navigation';
 import { Menu, X, ShoppingCart, Moon, Sun } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useThemeLanguage } from './ThemeLanguageProvider';
+import { useCart } from '../context/CartContext';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const { isDark, language, toggleTheme, toggleLanguage } = useThemeLanguage();
+  const cart = useCart();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -43,9 +45,9 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-lg overflow-hidden bg-white shadow-sm">
-              <Image src="/logo.png" alt="Mahabub Biryani House" width={40} height={40} className="object-cover" />
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-16 h-16 rounded-lg overflow-hidden bg-white shadow-sm flex items-center justify-center">
+              <Image src="/logo.png" alt="Mahabub Biryani House" width={64} height={64} className="object-cover object-center" />
             </div>
             <div className="hidden sm:block">
               <div className={`font-bold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>
@@ -110,7 +112,12 @@ export function Navbar() {
                   : 'bg-amber-500 text-white hover:bg-amber-600'
               }`}
             >
-              <ShoppingCart size={18} />
+              <div className="relative">
+                <ShoppingCart size={18} />
+                <span className="absolute -top-2 -right-2 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 text-xs text-white px-1">
+                  {cart.itemCount}
+                </span>
+              </div>
               <span className="hidden md:inline">{language === 'en' ? 'Order' : 'অর্ডার'}</span>
             </Link>
 

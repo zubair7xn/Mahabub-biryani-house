@@ -15,9 +15,13 @@ export const translations = {
       subheadline: 'Serving Savar with authentic flavors, premium ingredients, and unforgettable taste.',
       orderBtn: 'Order Now',
       menuBtn: 'View Menu',
+      scrollHint: 'Scroll to explore',
     },
     features: {
       title: 'Why Choose Us',
+    },
+    statistics: {
+      title: 'By The Numbers',
     },
     menu: {
       title: 'Our Menu',
@@ -30,6 +34,17 @@ export const translations = {
       desserts: 'Desserts',
       popular: 'Popular',
       addToCart: 'Add to Cart',
+    },
+    popular: {
+      title: 'Popular Dishes',
+      subtitle: 'Customer favorites handpicked for you',
+      viewAll: 'View Full Menu',
+    },
+    reviews: {
+      title: 'What Our Customers Say',
+      subtitle: 'Real reviews from real customers',
+      count: 'Based on {count}+ reviews',
+      cta: 'See All Reviews',
     },
     footer: {
       quickLinks: 'Quick Links',
@@ -77,9 +92,13 @@ export const translations = {
       subheadline: 'সারভারকে খাঁটি স্বাদ, প্রিমিয়াম উপাদান এবং অবিস্মরণীয় স্বাদ দিয়ে সেবা করছি।',
       orderBtn: 'এখনই অর্ডার করুন',
       menuBtn: 'মেনু দেখুন',
+      scrollHint: 'আরও দেখতে স্ক্রল করুন',
     },
     features: {
       title: 'আমাদের বিশেষত্ব',
+    },
+    statistics: {
+      title: 'আমাদের অর্জন',
     },
     menu: {
       title: 'আমাদের মেনু',
@@ -92,6 +111,17 @@ export const translations = {
       desserts: 'মিষ্টি',
       popular: 'জনপ্রিয়',
       addToCart: 'কার্টে যোগ করুন',
+    },
+    popular: {
+      title: 'জনপ্রিয় খাবার',
+      subtitle: 'গ্রাহকদের পছন্দের খাবার',
+      viewAll: 'সম্পূর্ণ মেনু দেখুন',
+    },
+    reviews: {
+      title: 'গ্রাহকরা কী বলেন',
+      subtitle: 'সত্যিকারের গ্রাহকদের কাছ থেকে আসল রিভিউ',
+      count: '{count}+ রিভিউর উপর ভিত্তি করে',
+      cta: 'সব রিভিউ দেখুন',
     },
     footer: {
       quickLinks: 'দ্রুত লিংক',

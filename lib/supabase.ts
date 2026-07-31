@@ -1,15 +1,18 @@
 import { createClient } from '@supabase/supabase-js';
+import type { Database } from './supabase-types';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set.');
-}
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: false,
-    detectSessionInUrl: false,
-  },
-});
+export const supabase = isSupabaseConfigured
+  ? createClient<Database>(supabaseUrl!, supabaseAnonKey!, {
+      auth: {
+        storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+        persistSession: true,
+        detectSessionInUrl: false,
+        autoRefreshToken: true,
+      },
+    })
+  : null;

@@ -3,6 +3,7 @@ import { ReviewCard } from './ReviewCard';
 import Link from 'next/link';
 import { ScrollReveal, StaggerContainer, StaggerItem } from './AnimationWrappers';
 import { Star, ArrowRight } from 'lucide-react';
+import { t } from '../utils/i18n';
 
 interface ReviewsSectionProps {
   isDark: boolean;
@@ -16,12 +17,10 @@ export function ReviewsSection({ isDark, language }: ReviewsSectionProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
           <ScrollReveal className="lg:col-span-1">
             <h2 className={`text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              {language === 'en' ? 'What Our Customers Say' : 'গ্রাহকরা কী বলেন'}
+              {t('reviews.title', language)}
             </h2>
             <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              {language === 'en'
-                ? 'Real reviews from real customers'
-                : 'সত্যিকারের গ্রাহকদের কাছ থেকে আসল রিভিউ'}
+              {t('reviews.subtitle', language)}
             </p>
 
             <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-700' : 'bg-white'}`}>
@@ -38,9 +37,7 @@ export function ReviewsSection({ isDark, language }: ReviewsSectionProps) {
                 {averageRating}
               </p>
               <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                {language === 'en'
-                  ? `Based on ${reviews.length}+ reviews`
-                  : `${reviews.length}+ রিভিউর উপর ভিত্তি করে`}
+                {t('reviews.count', language).replace('{count}', String(reviews.length))}
               </p>
             </div>
 
@@ -52,7 +49,7 @@ export function ReviewsSection({ isDark, language }: ReviewsSectionProps) {
                   : 'bg-amber-500 hover:bg-amber-600 text-white'
               }`}
             >
-              {language === 'en' ? 'See All Reviews' : 'সব রিভিউ দেখুন'}
+              {t('reviews.cta', language)}
               <ArrowRight size={18} />
             </Link>
           </ScrollReveal>

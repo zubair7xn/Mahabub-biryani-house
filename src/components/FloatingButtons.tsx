@@ -3,7 +3,8 @@
 import { MessageCircle, Phone, ArrowUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { restaurantInfo } from '../data/restaurant';
+import { useRestaurantSettings } from '../hooks/useRestaurantSettings';
+import { restaurantDefaults } from '../data/restaurantDefaults';
 import { useThemeLanguage } from './ThemeLanguageProvider';
 
 export function FloatingButtons() {
@@ -18,10 +19,12 @@ export function FloatingButtons() {
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
+  const { data: settings } = useRestaurantSettings();
+
   return (
     <>
       <motion.a
-        href={restaurantInfo.socialMedia.whatsappBusiness}
+        href={settings?.whatsappBusiness ?? restaurantDefaults.socialMedia.whatsappBusiness}
         target="_blank"
         rel="noopener noreferrer"
         initial={{ scale: 0 }}
@@ -36,7 +39,7 @@ export function FloatingButtons() {
       </motion.a>
 
       <motion.a
-        href={`tel:${restaurantInfo.phone}`}
+        href={`tel:${settings?.phone ?? restaurantDefaults.phone}`}
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         whileHover={{ scale: 1.1 }}

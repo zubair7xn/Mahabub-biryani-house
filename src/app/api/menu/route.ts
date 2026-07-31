@@ -7,6 +7,7 @@ export async function GET() {
     return NextResponse.json(menuItems, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to load menu items';
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error('Menu API error:', message);
+    return NextResponse.json({ error: message }, { status: 503 });
   }
 }

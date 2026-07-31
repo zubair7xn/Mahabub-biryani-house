@@ -1,13 +1,16 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { Facebook, MessageCircle, Phone, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { restaurantInfo } from '../data/restaurant';
+import { useRestaurantSettings } from '../hooks/useRestaurantSettings';
+import { restaurantDefaults } from '../data/restaurantDefaults';
 import { useThemeLanguage } from './ThemeLanguageProvider';
 
 export function Footer() {
   const { isDark, language } = useThemeLanguage();
+  const { data: settings } = useRestaurantSettings();
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [
@@ -31,9 +34,9 @@ export function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">𝓜</span>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-16 h-16 rounded-lg overflow-hidden bg-white shadow-sm flex items-center justify-center">
+                <Image src="/logo.png" alt="Mahabub Biryani House" width={64} height={64} className="object-cover object-center" />
               </div>
               <div>
                 <div className="font-bold text-white">Mahabub</div>
@@ -82,15 +85,15 @@ export function Footer() {
               <li className="flex items-start gap-2">
                 <Phone size={18} className="text-amber-400 mt-1 flex-shrink-0" />
                 <a
-                  href={`tel:${restaurantInfo.phone}`}
+                  href={`tel:${settings?.phone ?? restaurantDefaults.phone}`}
                   className="text-gray-400 hover:text-amber-400 transition-colors break-all"
                 >
-                  {restaurantInfo.phone}
+                  {settings?.phone ?? restaurantDefaults.phone}
                 </a>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin size={18} className="text-amber-400 mt-1 flex-shrink-0" />
-                <span className="text-gray-400">{restaurantInfo.address}</span>
+                <span className="text-gray-400">{settings?.address ?? restaurantDefaults.address}</span>
               </li>
             </ul>
           </motion.div>
@@ -107,7 +110,7 @@ export function Footer() {
             </h3>
             <div className="flex gap-4">
               <a
-                href={restaurantInfo.socialMedia.facebook}
+                href={settings?.facebook_url ?? restaurantDefaults.socialMedia.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-amber-400 hover:bg-amber-600 hover:text-white transition-all"
@@ -115,7 +118,7 @@ export function Footer() {
                 <Facebook size={20} />
               </a>
               <a
-                href={restaurantInfo.socialMedia.messenger}
+                href={settings?.instagram_url ?? restaurantDefaults.socialMedia.messenger}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-amber-400 hover:bg-blue-600 hover:text-white transition-all"
@@ -123,7 +126,7 @@ export function Footer() {
                 <MessageCircle size={20} />
               </a>
               <a
-                href={`tel:${restaurantInfo.phone}`}
+                href={`tel:${settings?.phone ?? restaurantDefaults.phone}`}
                 className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-amber-400 hover:bg-green-600 hover:text-white transition-all"
               >
                 <Phone size={20} />

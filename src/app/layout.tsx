@@ -3,6 +3,7 @@ import { defaultMetadata } from '../../lib/seo';
 import './globals.css';
 import { ThemeLanguageProvider } from '../components/ThemeLanguageProvider';
 import { QueryProvider } from '../components/QueryProvider';
+import { CartProvider } from '../context/CartContext';
 
 export const metadata: Metadata = defaultMetadata;
 
@@ -11,7 +12,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className="scroll-smooth">
       <body>
         <QueryProvider>
-          <ThemeLanguageProvider>{children}</ThemeLanguageProvider>
+          <CartProvider>
+            <ThemeLanguageProvider>{children}</ThemeLanguageProvider>
+          </CartProvider>
         </QueryProvider>
       </body>
     </html>

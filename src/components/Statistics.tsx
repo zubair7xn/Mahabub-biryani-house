@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ScrollReveal } from './AnimationWrappers';
 import { statistics } from '../data/restaurant';
 import { useEffect, useState } from 'react';
+import { t } from '../utils/i18n';
 
 interface StatisticsProps {
   isDark: boolean;
@@ -48,7 +49,7 @@ export function Statistics({ isDark, language }: StatisticsProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal className="text-center mb-16">
           <h2 className={`text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            {language === 'en' ? 'By The Numbers' : 'আমাদের অর্জন'}
+            {t('statistics.title', language)}
           </h2>
         </ScrollReveal>
 
