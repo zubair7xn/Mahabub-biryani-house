@@ -11,6 +11,7 @@ export const translations = {
       orderNow: 'Order Now',
     },
     hero: {
+      restaurantName: 'Mahabub Biryani House',
       headline: 'The Taste of Authentic Bangladeshi Biryani',
       subheadline: 'Serving Savar with authentic flavors, premium ingredients, and unforgettable taste.',
       orderBtn: 'Order Now',
@@ -88,9 +89,10 @@ export const translations = {
       orderNow: 'এখনই অর্ডার করুন',
     },
     hero: {
+      restaurantName: 'মাহবুব বিরিয়ানি হাউস',
       headline: 'খাঁটি বাংলাদেশী বিরিয়ানির স্বাদ',
       subheadline: 'সারভারকে খাঁটি স্বাদ, প্রিমিয়াম উপাদান এবং অবিস্মরণীয় স্বাদ দিয়ে সেবা করছি।',
-      orderBtn: 'এখনই অর্ডার করুন',
+      orderBtn: 'এমনিই অর্ডার করুন',
       menuBtn: 'মেনু দেখুন',
       scrollHint: 'আরও দেখতে স্ক্রল করুন',
     },

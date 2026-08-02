@@ -32,19 +32,28 @@ export function HeroSection({ language }: HeroSectionProps) {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <motion.h1
-            className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight"
+            className="text-4xl sm:text-5xl lg:text-7xl font-display font-extrabold text-white mb-3 tracking-tight leading-tight"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.4 }}
           >
-            {t('hero.headline', language)}
+            {t('hero.restaurantName', language)}
           </motion.h1>
 
           <motion.p
-            className="text-xl sm:text-2xl text-gray-200 mb-8"
+            className="text-sm sm:text-base text-amber-100 uppercase tracking-[0.4em] mb-6 opacity-90"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.6 }}
+            transition={{ duration: 1, delay: 0.5 }}
+          >
+            {t('hero.headline', language)}
+          </motion.p>
+
+          <motion.p
+            className="max-w-3xl mx-auto text-lg sm:text-xl text-gray-200 mb-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.7 }}
           >
             {t('hero.subheadline', language)}
           </motion.p>
