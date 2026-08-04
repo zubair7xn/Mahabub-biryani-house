@@ -9,7 +9,8 @@ export const restaurantDefaults = {
     messenger: 'https://m.me/mahabubbiryanihhouse',
     whatsappBusiness: 'https://wa.me/8801740544882',
   },
-  mapsUrl: 'https://www.google.com/maps/place/%E0%A6%AE%E0%A6%BE%E0%A6%B9%E0%A6%BE%E0%A6%AC%E0%A7%81%E0%A6%AC+%E0%A6%AC%E0%A6%BF%E0%A6%B0%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE%E0%A6%A8%E0%A6%BF+%E0%[...],
+  // Use a safe maps URL (latitude/longitude) to avoid special characters in the string
+  mapsUrl: 'https://www.google.com/maps?q=23.8488246,90.27588',
   coordinates: {
     lat: 23.8488246,
     lng: 90.27588,
