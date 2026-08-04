@@ -16,13 +16,11 @@ export function getPageMetadata(title: string, description: string, pathname: st
     applicationName: restaurantInfo.name,
     creator: restaurantInfo.name,
     authors: [{ name: restaurantInfo.name }],
-    icons: {
-      icon: '/favicon.svg',
-      apple: '/apple-touch-icon.svg',
-      other: [
-        { rel: 'manifest', url: '/site.webmanifest' },
-      ],
-    },
+   icons: {
+  icon: '/icon.png',
+  shortcut: '/icon.png',
+  apple: '/icon.png',
+},
     themeColor: '#f59e0b',
     viewport: 'width=device-width, initial-scale=1',
     alternates: {
