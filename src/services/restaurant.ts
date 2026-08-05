@@ -4,8 +4,8 @@ import type { RestaurantSettings } from '../types';
 export const restaurantDefaults = {
   name: 'Mahabub Biryani House',
   tagline: 'Authentic Bangladeshi Restaurant specializing in traditional Biryani and street foods.',
-  phone: '+880-1234-567890',
-  phone2: '+880-1234-567891',
+  phone: '+8801740544882',
+  phone2: '+8801740544882',
   email: 'info@mahabubbiryanihhouse.com',
   address: 'Rajashon Road, Savar, Dhaka, Bangladesh',
   coordinates: {
@@ -24,7 +24,7 @@ export const restaurantDefaults = {
   socialMedia: {
     facebook: 'https://facebook.com/mahabubbiryanihhouse',
     messenger: 'https://m.me/mahabubbiryanihhouse',
-    whatsappBusiness: 'https://wa.me/8801234567890',
+    whatsappBusiness: 'https://wa.me/8801740544882',
   },
 };
 
